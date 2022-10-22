@@ -19,7 +19,7 @@ function App() {
         return item;
       });
       setNumbers(newArr);
-    }, 1000);
+    }, 5000);
   }, []);
 
   const addPrimeNumberToArray = (array) => {
@@ -43,7 +43,7 @@ function App() {
 
   const hasPairNumberInArray = (array, number) => {
     const filteredArray = array.filter((item) => {
-      return item === number ? true : false;
+      return item.number === number ? true : false;
     });
 
     return filteredArray.length === 2;
