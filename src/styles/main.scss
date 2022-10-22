@@ -33,8 +33,16 @@ body {
     background: #FFFFFF;
     cursor: pointer;
     &:hover {
-      border: 0.5px solid #ED5517;
+      border: 0.5px solid #CDCDCD;
       filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.15));
     }
+
+    &:focus {
+      border: 0.5px solid #ED5517;
+    }
   }
+}
+
+.clicked { 
+  border: 0.5px solid #ED5517;
 }

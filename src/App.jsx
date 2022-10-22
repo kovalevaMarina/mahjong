@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 function App() {
   const [numbers, setNumbers] = useState([]);
+  const [firstNumberInPair, setFirstNumberInPair] = useState({});
 
   useEffect(() => {
     const result = [];
@@ -13,18 +14,28 @@ function App() {
     setNumbers(shuffledResult);
 
     setTimeout(() => {
-      numbers.forEach((item) => (item.visible = false));
-    }, 5000);
+      const newArr = shuffledResult.map((item) => {
+        item.visible = false;
+        return item;
+      });
+      setNumbers(newArr);
+    }, 1000);
   }, []);
 
   const addPrimeNumberToArray = (array) => {
     const randomNumber = getRandomNumber();
     if (isPrime(randomNumber) && !hasPairNumberInArray(array, randomNumber)) {
-      const element = {
+      const elementFirst = {
+        id: Date.now() * Math.random(),
         number: randomNumber,
         visible: true,
       };
-      array.push(element, element);
+      const elementSecond = {
+        id: Date.now() * Math.random(),
+        number: randomNumber,
+        visible: true,
+      };
+      array.push(elementFirst, elementSecond);
     } else {
       addPrimeNumberToArray(array);
     }
@@ -60,9 +71,32 @@ function App() {
     return array.sort(() => Math.random() - 0.5);
   };
 
-  const handleClick = (element) => {
-    element.visible = false;
-    console.log(element);
+  const makeItemsInvisibile = (itemFirst, itemSecond) => {
+    const newMakeArr = numbers.map((item) => {
+      if (itemFirst.id === item.id || itemSecond.id === item.id) {
+        item.visible = false;
+      }
+      return item;
+    });
+    setNumbers(newMakeArr);
+  };
+
+  const handleClick = (elem) => {
+    const newHandleArr = numbers.map((item) => {
+      if (elem.id === item.id) {
+        item.visible = true;
+        if (!firstNumberInPair.id) {
+          setFirstNumberInPair(item);
+        } else if (firstNumberInPair.number === item.number) {
+          setFirstNumberInPair({});
+        } else if (firstNumberInPair.number != item.number) {
+          setFirstNumberInPair({});
+          setTimeout(() => makeItemsInvisibile(firstNumberInPair, item), 1000);
+        }
+      }
+      return item;
+    });
+    setNumbers(newHandleArr);
   };
 
   return (
@@ -75,10 +109,10 @@ function App() {
               <button
                 key={i}
                 className="btn-list__item"
+                disabled={element.visible}
                 onClick={() => handleClick(element)}
               >
                 {element.visible ? element.number : ""}
-                {String(element.visible)}
               </button>
             );
           })}
